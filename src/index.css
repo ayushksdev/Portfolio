@@ -3,29 +3,43 @@
 
 body {
     font-family: "Space Grotesk", sans-serif;
-    background-color: #190b1f;
-  }
+    background-color: black;
+    overflow-x: hidden;
+}
 
-  h2 {
-    @apply text-xl md:text-4xl
-  }
+h2 {
+    @apply text-xl md:text-4xl;
+}
 
-  p {
-    @apply text-xl tracking-tight leading-relaxed
-  }
+p {
+    @apply text-xl tracking-tight leading-relaxed;
+}
 
-  span {
-    @apply text-purple-600
-  }
+span {
+    @apply text-purple-600;
+}
 
-  .shiny-effect {
+.shiny-effect {
     position: absolute;
     border-radius: 50%;
     pointer-events: none;
     z-index: 1;
     background: radial-gradient(circle, rgba(178, 19, 202, 0.2), transparent 70%);
-  }  
+}
 
-  .bg-primary-color {
-    @apply bg-purple-600
+.bg-primary-color {
+    @apply bg-purple-600;
+}
+
+/* Performance Utilities for Framer Motion */
+.will-change-transform {
+    will-change: transform;
+}
+
+.preserve-3d {
+    transform-style: preserve-3d;
+}
+
+.backface-hidden {
+    backface-visibility: hidden;
 }

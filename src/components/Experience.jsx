@@ -1,6 +1,5 @@
-
 import React from 'react'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 
 const experiences = [
     {
@@ -13,46 +12,75 @@ const experiences = [
         company: 'Microsoft Office – Ideathon Event',
         period: '2024',
         description:
-            'Organized and managed an Ideathon event in collaboration with Microsoft Office, ensuring smooth coordination and participation.'
+            'Organized and managed an Ideathon event in collaboration with Microsoft Office.'
     },
     {
         company: 'Hashtag Tech Society',
         period: '2024-Present',
         description:
-            'Serving as the Technical Team Head, leading and mentoring members on development-focused initiatives and events.'
+            'Technical Team Head, leading and mentoring members on development initiatives.'
     },
     {
-        company: 'Data Structures and Algorithms (DSA) Mastery',
+        company: 'DSA Mastery',
         period: '2024-2025',
         description:
-            'Mastered Trees, Graphs, Linked Lists, Stacks, and Queues in Java. Solved 140+ problems on GeeksforGeeks, enhancing problem-solving and algorithmic skills.'
+            'Solved 140+ problems and mastered core data structures in Java.'
     }
-];
-
+]
 
 const Experience = () => {
-  return (
-    <div className='p-8 max-w-[650px] mx-auto'>
-        <h1 className='text-4xl text-gray-200 font-bold text-center mb-12'>Experience</h1>
-        <motion.div className='space-y-8'>
-            {experiences.map((experience, index) => (
-                <motion.div
-                    key={index}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 0.8 }}
-                    className='border border-purple-600 p-6 rounded-lg shadow-md
-                    hover:shadow-xl transition-shadow duration-300 bg-purple-700/10'
-                >
-                    <h2 className='text-gray-100 text-2xl font-semibold'>{experience.company}</h2>
-                    <p className='text-gray-300'>{experience.period}</p>
-                    <p className='text-gray-400 mt-4'>{experience.description}</p>
-                </motion.div>
-            ))}
-        </motion.div>
-    </div>
-  )
+    const { scrollY } = useScroll()
+
+    // Parallax background movement
+    const yBg = useTransform(scrollY, [0, 800], [0, -200])
+
+    return (
+        <section className="relative py-20 overflow-hidden bg-black text-white">
+
+            {/* 🔮 Background Glow (Parallax Layer) */}
+            <motion.div
+                style={{ y: yBg }}
+                className="absolute w-[500px] h-[500px] bg-purple-600 rounded-full blur-[150px] opacity-20 top-10 left-10"
+            />
+
+            <h1 className="text-5xl font-bold text-center mb-20 relative z-10">
+                Experience
+            </h1>
+
+            {/* Timeline line */}
+            <div className="absolute left-1/2 top-0 w-[2px] h-full bg-gradient-to-b from-purple-500 to-transparent opacity-40" />
+
+            <div className="relative z-10 max-w-4xl mx-auto space-y-20">
+                {experiences.map((exp, index) => (
+                    <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 100, scale: 0.9 }}
+                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                        transition={{ duration: 0.8, delay: index * 0.2 }}
+                        viewport={{ once: true }}
+                        className={`flex items-center ${index % 2 === 0 ? 'justify-start' : 'justify-end'
+                            }`}
+                    >
+                        {/* Card */}
+                        <motion.div
+                            whileHover={{
+                                scale: 1.05,
+                                rotateY: index % 2 === 0 ? 8 : -8
+                            }}
+                            transition={{ type: 'spring', stiffness: 200 }}
+                            className="w-[320px] p-6 rounded-xl backdrop-blur-lg bg-white/5 border border-purple-500/30 shadow-lg hover:shadow-purple-500/30"
+                        >
+                            <h2 className="text-xl font-semibold">{exp.company}</h2>
+                            <p className="text-purple-400 text-sm">{exp.period}</p>
+                            <p className="text-gray-300 mt-3 text-sm">
+                                {exp.description}
+                            </p>
+                        </motion.div>
+                    </motion.div>
+                ))}
+            </div>
+        </section>
+    )
 }
 
 export default Experience

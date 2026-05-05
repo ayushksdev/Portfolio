@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import profilepic from "../assets/profpic.png";
 import { TypeAnimation } from "react-type-animation";
 import ShinyEffect from "./ShinyEffect";
@@ -7,152 +7,183 @@ import {
   AiOutlineInstagram,
   AiOutlineLinkedin,
 } from "react-icons/ai";
-import { DiCss3, DiHtml5, DiJavascript1, DiReact, DiJava } from "react-icons/di";
-import { motion } from "framer-motion";
+import { DiJavascript1, DiReact, DiJava } from "react-icons/di";
+import { SiSpringboot, SiDocker } from "react-icons/si";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionValue,
+  useSpring,
+} from "framer-motion";
 
 const Hero = () => {
+  const containerRef = useRef(null);
+  const { scrollY } = useScroll();
+
+  const textY = useTransform(scrollY, [0, 500], [0, 150]);
+  const bgY = useTransform(scrollY, [0, 500], [0, 200]);
+
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springConfig = { stiffness: 50, damping: 20 };
+  const springX = useSpring(mouseX, springConfig);
+  const springY = useSpring(mouseY, springConfig);
+
+  const springXInverse = useSpring(
+    useTransform(mouseX, (x) => -x),
+    springConfig
+  );
+
+  const handleMouseMove = (e) => {
+    requestAnimationFrame(() => {
+      const x = (e.clientX / window.innerWidth) * 2 - 1;
+      const y = (e.clientY / window.innerHeight) * 2 - 1;
+      mouseX.set(x * 30);
+      mouseY.set(y * 30);
+    });
+  };
+
+  const icons = [
+    { Icon: DiJava, color: "#007396" },
+    { Icon: SiSpringboot, color: "#6DB33F" },
+    { Icon: SiDocker, color: "#2496ED" },
+    { Icon: DiReact, color: "#61DAFB" },
+    { Icon: DiJavascript1, color: "#F7DF1E" },
+  ];
+
   return (
-    <div className="mt-36 max-w-[1200px] mx-auto relative">
-      <div className="grid md:grid-cols-2 place-items-center gap-8">
+    <div
+      ref={containerRef}
+      onMouseMove={handleMouseMove}
+      className="min-h-screen mt-20 pt-16 relative flex flex-col justify-center bg-black overflow-hidden"
+    >
+      {/* 🔮 Background Orbs */}
+      <motion.div
+        style={{ y: bgY }}
+        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+        transition={{ duration: 12, repeat: Infinity }}
+        className="absolute top-[20%] left-[10%] w-[300px] md:w-[500px] bg-purple-600/20 rounded-full blur-[120px] -z-10"
+      />
 
-        {/* LEFT SIDE */}
-        <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1 }}
-        >
-          <TypeAnimation
-            sequence={[
-              "Fullstack Java Dev",
-              1000,
-              "React Developer",
-              1000,
-              "JS Enthusiast",
-              1000,
-              "Passionate Coder",
-              1000,
-            ]}
-            speed={50}
-            repeat={Infinity}
-            className="font-bold text-gray-400 text-xl md:text-5xl italic- mb-4"
-          />
+      <motion.div
+        style={{ y: bgY }}
+        animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.4, 0.2] }}
+        transition={{ duration: 10, repeat: Infinity }}
+        className="absolute bottom-[10%] right-[10%] w-[250px] md:w-[400px] rounded-full blur-[100px] -z-10"
+      />
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="text-gray-200 md:text-7xl text-5xl tracking-tight mb-4"
-          >
-            HEY, I AM <br />
-            <span className="text-purple-500">Ayush Kumar Singh</span>
-          </motion.p>
+      {/* CONTENT CONTAINER */}
+      <div className="max-w-7xl mx-auto w-full px-6">
+        <div className="grid md:grid-cols-2 place-items-center gap-8 relative z-10">
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: 1 }}
-            className="text-gray-300 max-w-[300px] md:max-w-[500px] md:text-2xl text-lg mb-6"
-          >
-            I am a passionate fullstack developer skilled in Java and React,
-            always eager to learn and build innovative solutions.
-          </motion.p>
-
-          {/* BUTTON + SOCIALS */}
+          {/* LEFT */}
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: 1.5 }}
-            className="flex flex-row items-center gap-6 my-4 md:mb-0"
+            style={{ y: textY, x: springXInverse }}
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1 }}
           >
-            {/* Download CV Button */}
-            <motion.button
-              whileHover={{ scale: 1.05, boxShadow: "0px 0px 8px rgba(0, 0, 0, 0.3)" }}
-              className="z-10 cursor-pointer font-bold text-gray-200 md:w-auto p-4 border
-              border-purple-400 rounded-xl"
-            >
-              <a
-                href="https://drive.google.com/file/d/17OXZh5s3cHQV7zA1vVfyxBTNIrt0zj95/view?usp=sharing"
+            <TypeAnimation
+              sequence={[
+                "Full Stack Java Developer", 1000,
+                "Spring Boot Backend Engineer", 1000,
+                "React Developer", 1000,
+                "Building Scalable Systems", 1000,
+              ]}
+              speed={50}
+              repeat={Infinity}
+              className="font-bold text-transparent bg-clip-text text-xl md:text-4xl mb-4"
+            />
+
+            <h1 className="text-gray-100 md:text-7xl text-5xl font-extrabold mb-4">
+              HEY, I AM <br />
+              <span className="text-purple-500 drop-shadow-[0_0_15px_rgba(168,85,247,0.6)]">
+                Ayush Kumar Singh
+              </span>
+            </h1>
+
+            <p className="text-gray-300 max-w-[500px] text-lg mb-8">
+              Full Stack Developer specializing in Java (Spring Boot) and React,
+              focused on building scalable backend systems and modern web applications.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-8">
+              <motion.a
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: "0px 0px 20px ",
+                }}
+                whileTap={{ scale: 0.95 }}
+                href="https://drive.google.com/file/d/1vifhADw78JzFeywRIEGdmT8ZAzTnSb76/view?usp=sharing"
                 target="_blank"
                 rel="noopener noreferrer"
+                className="font-bold text-white px-8 py-4 bg-gradient-to-r from-purple-600 to-purple-800 rounded-full shadow-[0_0_15px_rgba(168,85,247,0.4)]"
               >
                 Download CV
-              </a>
-            </motion.button>
-
-            {/* Social Icons */}
-            <div className="flex gap-6 flex-row text-4xl md:text-6xl text-purple-400 z-20">
-              <motion.a whileHover={{ scale: 1.2 }} href="https://github.com/ayushkumarsingh14">
-                <AiOutlineGithub />
               </motion.a>
 
-              <motion.a whileHover={{ scale: 1.2 }} href="https://www.linkedin.com/in/ayush-kumar-singh-7ba5862ba">
-                <AiOutlineLinkedin />
-              </motion.a>
-
-              <motion.a whileHover={{ scale: 1.2 }} href="https://instagram.com/">
-                <AiOutlineInstagram />
-              </motion.a>
+              <div className="flex gap-6 text-3xl text-gray-300">
+                <motion.a whileHover={{ scale: 1.2, y: -5, color: "#a855f7" }} href="https://github.com/ayushksdev">
+                  <AiOutlineGithub />
+                </motion.a>
+                <motion.a whileHover={{ scale: 1.2, y: -5, color: "#a855f7" }} href="https://www.linkedin.com">
+                  <AiOutlineLinkedin />
+                </motion.a>
+                <motion.a whileHover={{ scale: 1.2, y: -5, color: "#a855f7" }} href="https://instagram.com">
+                  <AiOutlineInstagram />
+                </motion.a>
+              </div>
             </div>
           </motion.div>
-        </motion.div>
 
-        {/* RIGHT SIDE — CIRCULAR IMAGE */}
-        
-{/* RIGHT SIDE — CIRCULAR IMAGE */}
-{/* RIGHT SIDE — CIRCLE SAME, IMAGE BIGGER */}
-<motion.div
-  className="relative flex justify-center items-center"
-  initial={{ opacity: 0, scale: 0.9 }}
-  whileInView={{ opacity: 1, scale: 1 }}
-  viewport={{ once: true }}
-  transition={{ duration: 1 }}
->
+          {/* RIGHT IMAGE */}
+          <motion.div
+            style={{ x: springX, y: springY }}
+            className="relative flex justify-center items-center"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1 }}
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="absolute w-[300px] md:w-[380px] h-[300px] md:h-[380px] rounded-full border border-purple-500/30 border-dashed"
+            />
 
-  {/* SAME CIRCLE */}
-  <div
-    className="absolute w-[240px] h-[240px] md:w-[320px] md:h-[320px]
-               rounded-full bg-purple-500 blur-[60px] opacity-20">
-  </div>
+            {/* ✅ FIX: removed purple glow causing bleed */}
 
-  {/* SAME BORDER + CIRCLE FRAME */}
-  <div
-    className="rounded-full overflow-hidden
-               border-[2px] border-purple-300
-               shadow-[0_0_25px_rgba(168,85,247,0.25)]">
-    <img
-      src={profilepic}
-      className="w-[260px] md:w-[340px] object-cover rounded-full"
-      alt="profile"
-    />
-  </div>
-</motion.div>
-
-
-
+            <div className="relative rounded-full overflow-hidden border-[3px] border-purple-400/50 shadow-[0_0_40px_rgba(168,85,247,0.5)]">
+              <img
+                src={profilepic}
+                className="w-[260px] md:w-[320px] h-[260px] md:h-[320px] object-cover rounded-full"
+                alt="Ayush Kumar Singh profile picture"
+                loading="lazy"
+              />
+            </div>
+          </motion.div>
+        </div>
       </div>
 
-      {/* Tech Stack */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1, delay: 2 }}
-        className="flex flex-row text-7xl px-12 md:px-0 w-full justify-center items-center py-24"
-      >
-        <p className="text-gray-200 mr-6">My Tech Stack</p>
-        <DiHtml5 className="text-orange-600 mx-2" />
-        <DiCss3 className="text-blue-600 mx-2" />
-        <DiJavascript1 className="text-yellow-500 mx-2" />
-        <DiReact className="text-blue-500 mx-2" />
-        <DiJava className="text-green-500 mx-2" />
-      </motion.div>
+      {/* TECH STACK */}
+      <div className="mt-24 flex flex-wrap justify-center gap-8 px-6">
+        {icons.map(({ Icon, color }, i) => (
+          <motion.div
+            key={i}
+            whileHover={{ scale: 1.3, y: -10 }}
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 4, repeat: Infinity, delay: i * 0.2 }}
+            className="text-5xl md:text-6xl"
+            style={{ color }}
+          >
+            <Icon />
+          </motion.div>
+        ))}
+      </div>
 
-      {/* Background Shine */}
-      <div className="absolute inset-0 hidden md:block">
+      {/* Shine */}
+      <div className="absolute inset-0 hidden md:block pointer-events-none">
         <ShinyEffect left={0} top={0} size={1400} />
       </div>
     </div>

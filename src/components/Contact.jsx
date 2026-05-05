@@ -1,78 +1,91 @@
 import React from "react"
-import { AiFillLinkedin, AiFillGithub } from "react-icons/ai"
 import { motion } from "framer-motion"
 
 const Contact = () => {
   return (
-    <div className="px-6 max-w-[1000px] mx-auto md:my-12" id="contact">
-      <div className="grid md:grid-cols-2 place-items-center">
-        <div className="text-center md:text-left">
-          <div className="text-gray-300 my-3">
-            <h3 className="text-4xl font-semibold mb-5">About <span>Me</span></h3>
-            <p className="text-justify md:text-left leading-7 w-full md:w-11/12 mx-auto">
-              I am a passionate Full Stack Developer currently pursuing B.Tech in Computer Science. 
-              I love building interactive web applications and exploring new technologies.
-            </p>
-          </div>
+    <section className="min-h-screen flex flex-col md:flex-row bg-black text-white">
 
-          <div className="flex flex-col md:flex-row mt-10 items-center gap-7">
-            <div className="bg-gray-800/40 p-4 rounded-lg w-40 text-center">
-              <h3 className="md:text-4xl text-2xl font-semibold text-white">10<span>+</span></h3>
-              <p className="text-xs md:text-base"><span>Technologies Explored</span></p>
-            </div>
+      {/* LEFT SIDE - BIG IMPACT */}
+      <div className="flex-1 flex flex-col justify-center px-10 md:px-20">
+        <motion.h1
+          initial={{ opacity: 0, y: 80 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-5xl md:text-7xl font-bold leading-tight"
+        >
+          Let’s Build <br />
+          Something <span className="text-purple-500">Crazy</span>
+        </motion.h1>
 
-            <div className="bg-gray-800/40 p-5 rounded-lg w-40 text-center">
-              <h3 className="md:text-4xl text-2xl font-semibold text-white">3<span>+</span></h3>
-              <p className="text-xs md:text-base"><span>Certifications</span></p>
-            </div>
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="mt-6 text-gray-400 max-w-md"
+        >
+          Have an idea, project, or opportunity?
+          Drop a message and let’s make it real.
+        </motion.p>
 
-            <div className="bg-gray-800/40 p-5 rounded-lg w-40 text-center">
-              <h3 className="md:text-4xl text-2xl font-semibold text-white">2<span>+</span></h3>
-              <p className="text-xs md:text-base"><span>Hackathons</span></p>
-            </div>
-          </div>
-        </div>
+        {/* Magnetic Button */}
+        <motion.a
+          href="#form"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          className="mt-10 inline-block px-8 py-4 bg-purple-600 rounded-full text-lg font-semibold shadow-lg hover:shadow-purple-500/50"
+        >
+          Start a Conversation →
+        </motion.a>
+      </div>
 
-        <form
+      {/* RIGHT SIDE - FLOATING FORM */}
+      <div className="flex-1 flex justify-center items-center p-10">
+
+        <motion.form
+          id="form"
+          initial={{ opacity: 0, y: 100, rotate: -2 }}
+          whileInView={{ opacity: 1, y: 0, rotate: 0 }}
+          transition={{ duration: 0.8 }}
           action="https://getform.io/f/bkkykdgb"
           method="POST"
-          className="max-w-6xl p-5 md:p-12 w-full"
-          id="form"
+          className="w-full max-w-md bg-[#0f0f0f] p-8 rounded-2xl shadow-2xl border border-purple-500/20"
         >
-          <p className="text-gray-100 font-bold text-xl mb-2 text-center md:text-left">
-            Let´s connect!
-          </p>
+          <h2 className="text-2xl font-semibold mb-6">Send Message</h2>
+
           <input
             type="text"
-            id="name"
-            placeholder="Your Name ..."
             name="name"
-            className="mb-2 w-full rounded-md border border-purple-600 py-2 pl-2 pr-4 text-white placeholder-gray-400 bg-transparent"
+            placeholder="Your Name"
+            className="w-full mb-4 p-3 bg-transparent border-b border-gray-600 focus:border-purple-500 outline-none"
           />
+
           <input
             type="email"
-            id="email"
-            placeholder="Your Email ..."
             name="email"
-            className="mb-2 w-full rounded-md border border-purple-600 py-2 pl-2 pr-4 text-white placeholder-gray-400 bg-transparent"
+            placeholder="Your Email"
+            className="w-full mb-4 p-3 bg-transparent border-b border-gray-600 focus:border-purple-500 outline-none"
           />
+
           <textarea
             name="message"
-            id="message"
-            cols="30"
             rows="4"
-            placeholder="Your Message ..."
-            className="mb-2 w-full rounded-md border border-purple-600 py-2 pl-2 pr-4 text-white placeholder-gray-400 bg-transparent"
+            placeholder="Your Message"
+            className="w-full mb-6 p-3 bg-transparent border-b border-gray-600 focus:border-purple-500 outline-none"
           />
-          <button
-            type="submit"
-            className="w-full py-3 rounded-md text-gray-100 font-semibold text-xl bg-primary-color"
+
+          <motion.button
+            whileHover={{
+              scale: 1.05,
+              boxShadow: "0px 0px 25px #a855f7"
+            }}
+            whileTap={{ scale: 0.95 }}
+            className="w-full py-3 bg-purple-600 rounded-lg font-semibold"
           >
-            Send Message
-          </button>
-        </form>
+            Send 🚀
+          </motion.button>
+        </motion.form>
       </div>
-    </div>
+    </section>
   )
 }
 
